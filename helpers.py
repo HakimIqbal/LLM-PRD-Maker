@@ -57,14 +57,14 @@ def load_prompt_from_file():
         with open("prompts.txt", "r") as file:
             prompt_text = file.read().strip()
 
-            # Menambahkan instruksi "Pronas" untuk memastikan fokus dalam konteks overview
-            pronas = """
+            # Menambahkan instruksi "Personas" untuk memastikan fokus dalam konteks overview
+            personas = """
             Pastikan semua jawaban dan keluaran yang dihasilkan terkait langsung dengan konteks overview yang diberikan.
             Hindari pembahasan yang keluar dari lingkup masalah yang tercantum dalam overview.
             """
 
-            # Menggabungkan pronas dengan template prompt yang ada
-            prompt_text = pronas + "\n\n" + prompt_text
+            # Menggabungkan personas dengan template prompt yang ada
+            prompt_text = personas + "\n\n" + prompt_text
 
             return PromptTemplate(
                 input_variables=[
