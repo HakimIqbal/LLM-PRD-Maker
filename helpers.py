@@ -34,9 +34,10 @@ llm = ChatGroq(
 def get_or_create_memory(session_id: str) -> ConversationBufferMemory:
     """Get or create memory for a session."""
     if session_id not in conversation_memories:
+        # Tidak menyimpan chat_history, hanya menyimpan human input
         conversation_memories[session_id] = ConversationBufferMemory(
-            memory_key="chat_history",
-            input_key="human_input"  # Set input_key to 'human_input' as required
+            memory_key="human_input",
+            input_key="human_input"  # Memasukkan human input
         )
     return conversation_memories[session_id]
 
@@ -55,9 +56,19 @@ def load_prompt_from_file():
     try:
         with open("prompts.txt", "r") as file:
             prompt_text = file.read().strip()
+
+            # Menambahkan instruksi "Pronas" untuk memastikan fokus dalam konteks overview
+            pronas = """
+            Pastikan semua jawaban dan keluaran yang dihasilkan terkait langsung dengan konteks overview yang diberikan.
+            Hindari pembahasan yang keluar dari lingkup masalah yang tercantum dalam overview.
+            """
+
+            # Menggabungkan pronas dengan template prompt yang ada
+            prompt_text = pronas + "\n\n" + prompt_text
+
             return PromptTemplate(
                 input_variables=[
-                    "human_input", "overview", "start_date", "end_date", "document_version",
+                    "overview", "start_date", "end_date", "document_version",
                     "product_name", "document_owner", "developer",
                     "stakeholder", "doc_stage", "created_date"
                 ],

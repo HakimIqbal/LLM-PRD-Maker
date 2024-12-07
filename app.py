@@ -33,16 +33,11 @@ def generate():
         if not prompt_template:
             return jsonify({"error": "Prompt template could not be loaded"}), 400
 
-        # Get data from the request
+        # Get data from the request (data yang diterima dari frontend)
         data = request.json or {}
-        human_input = data.get("human_input", "")  # Default to empty string if not provided
-
-        # Create chain with memory and prompt
-        chain = create_chain(prompt_template, memory)
 
         # Prepare the input data as a dictionary
         inputs = {
-            "human_input": human_input,
             "overview": data.get("overview", ""),
             "start_date": data.get("start_date", ""),
             "end_date": data.get("end_date", ""),
@@ -54,6 +49,9 @@ def generate():
             "doc_stage": data.get("doc_stage", ""),
             "created_date": data.get("created_date", "")
         }
+
+        # Create chain with memory and prompt
+        chain = create_chain(prompt_template, memory)
 
         # Run the chain using invoke
         result = chain.invoke(inputs)
